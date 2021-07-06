@@ -91,3 +91,32 @@ class Moderation(commands.Cog):
                 await ctx.send("I do not have the needed permissions! They are `Manage roles`")
             if isinstance(error, commands.MemberNotFound):
                 await ctx.send("They're a :ghost: How do I interact with them?")
+                
+                
+        @commands.command()
+        @commands.has_permissions(manage_messages=True)
+        @commands.bot_has_permissions(manage_roles=True)
+        async def unmute(ctx, member : discord.Member):
+            mutedRole = discord.utils.get(ctx.guild.roles, name = "Muted")
+            if not mutedRole:
+                mutedRole = await ctx.guild.create_role(name='Muted')
+                for channel in ctx.guild.channels:
+                    await channel.set_overwrites(mutedRole, send_messages=False)
+            if mutedRole in member.roles:
+                await member.remove_roles(mutedRole)
+                embed = discord.Embed(title="Unmuted", description = f"You have been unmuted from **{ctx.guild.name}** by **{ctx.author}**!", colour = ctx.author.colour, timestamp = datetime.datetime.now())
+                await member.send(embed=embed)
+                await ctx.send(f"{member} has successfully been unmuted!")
+            else:
+                await ctx.send("They're not muted bruh")
+
+        @unmute.error 
+        async def unmute_error(ctx, error):
+            if isinstance(error, commands.MissingPermissions):
+                await ctx.send(f"You need the `manage messages` permission!")
+            if isinstance(error, commands.MissingRequiredArgument):
+                await ctx.send("Please provide all arguments! They are `member`")
+            if isinstance(error, commands.BotMissingPermissions):
+                await ctx.send("I need the `manage roles` permission!")
+            if isinstance(error, commands.MemberNotFound):
+                await ctx.send(f"How do I interact with a :ghost:")
