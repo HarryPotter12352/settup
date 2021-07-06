@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 import datetime
+from dipytools import tools
 
 
 class Moderation(commands.Cog):
@@ -33,4 +34,15 @@ class Moderation(commands.Cog):
                 await ctx.send("I do not have the needed permissions! They are `Ban members`")
             if isinstance(error, commands.MemberNotFound):
                 await ctx.send("They're a :ghost: How do I interact with them?")
-                
+
+        @commands.command()
+        @commands.has_permissions(kick_members=True)
+        @commands.bot_has_permissions(kick_members=True)
+        async def kick(ctx, member : discord.Member, *, reason : str):
+            """
+            Kicks a member
+            """
+            await member.kick(reason=reason)
+            embed = discord.Embed(title="Kicked", description=f'You have been kicked from **{ctx.guild.name}** by **{ctx.author}** for reason **{reason}**', timestamp = datetime.datetime.now(), colour = ctx.author.colour)
+            embed.set_thumbnail(url=ctx.author.avatar_url)
+            await member.send(embed=embed)
