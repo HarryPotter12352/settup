@@ -11,7 +11,7 @@ def keep_alive():
     """
     This will host your bot for 1 hour
     To continue with the hosting, you have to link it up with an uptime service
-    Note: This will work on on replit
+    Note: This will work only on replit
     """
     app = Flask("")
     @app.route("/")
