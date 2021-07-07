@@ -106,7 +106,12 @@ class Utility(commands.Cog):
         async def roll_error(self, ctx, error):
             if isinstance(error, commands.MissingRequiredArgument):
                 await ctx.send("Please send both the numbers!")
-            
+
+                
+        @commands.command()
+        async def flip(self, ctx):
+            choice = ["Heads", "Tails"]
+            embed = discord.Embed(title='And you rolled...', description = f'{random.choice(choice)}, colour = discord.Colour.random())
             
         def setup(client):
             client.add_cog(Utility(client))
