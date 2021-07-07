@@ -56,7 +56,6 @@ class Utility(commands.Cog):
         async def poll_error(self, ctx, error):
             if isinstance(error, commands.MissingRequiredArgument):
                 await ctx.send(f"What do you wanna ask the people?")
-
         
         @commands.command()
         async def add(self, ctx, no1 : float, no2 : float):
@@ -98,10 +97,22 @@ class Utility(commands.Cog):
                 await ctx.send("Please give the first number and the second!")
 
         
+       
         @commands.command()
-        async def roll(self, ctx, no1, no2):
-            await ctx.send(random.randint(no1, no2))
-            
+        async def roll(self, ctx, no1: float = None, no2: float = None):
+            if no1 is None:
+                await ctx.send("You must give me a first number to work with!")
+                return
+            if no2 is None:
+                await ctx.send("You must give me a second number to work with!")
+                return
+            if no2 is none and no1 is None:
+                wait ctx.send("Please send me number values for this command.")
+                return
+            else:
+                num = randrange(no1, no2)
+                await ctx.send(f"{ctx.author} rolled a {num}")
+          
         @roll.error 
         async def roll_error(self, ctx, error):
             if isinstance(error, commands.MissingRequiredArgument):
