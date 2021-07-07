@@ -145,3 +145,52 @@ class Moderation(commands.Cog):
                 await ctx.send("I do not have the needed permissions! They are `Manage roles`")
             if isinstance(error, commands.MemberNotFound):
                 await ctx.send("They're a :ghost: How do I interact with them?")
+        @commands.command()
+        @commands.has_permissions(ban_members=True)
+        async def unban(self, ctx, *, member):
+            banned_users = await ctx.guild.bans()
+            member_name, member_discriminator = member.split('#')
+
+            for ban_entry in banned_users:
+                user = ban_entry.banned_users
+
+                if (user.name, user.discriminator) == (member_name, member_discriminator):
+                    await ctx.guild.unban(user)
+                    await ctx.send(f"Unbanned {user}")
+                    await user.send(f"You have been unbanned from **{ctx.guild.name}** by **{ctx.author}**")
+
+        @unban.error 
+        async def unban_error(self, ctx, error):
+            if isinstance(error, commands.MissingPermissions):
+                await ctx.send(f"You need the `ban_members` permissions required to run this command {ctx.author.mention}!")
+            if isinstance(error, commands.MissingRequiredArgument):
+                await ctx.send("Please provide all of the vaild parameters. They are `member`")
+            if isinstance(error, commands.MemberNotFound):
+                await ctx.send("They're a :ghost: How do I interact with them?")
+
+
+        @commands.command()
+        @commands.has_permissions(ban_members=True)
+        @commands.bot_has_permissions(ban_members=True)
+        async def tempban(self, ctx, member : discord.Member, time, *, reason : str):
+            converted_time = convert(time)
+            embed = discord.Embed(title='Banned', description = f'You have been banned from **{ctx.guild.name}** by **{ctx.author}** for **{time}** for reason **{reason}**', colour = ctx.author.color, timestamp = datetime.datetime.now())
+            await member.send(embed=embed)
+            await member.ban(reason=reason)
+            await ctx.send(f'Successfully banned **{member}** for **{time}**')
+            await asyncio.sleep(converted_time)
+            embed = discord.Embed(title=f'Unbanned', description = f'You have been unbanned from **{ctx.guild.name}** after a tempban of **{time}**', colour = ctx.author.color, timestamp = datetime.datetime.now())
+            await member.unban()
+            await member.send(embed=embed)
+
+
+        @tempban.error 
+        async def tempban_error(self, ctx, error):
+            if isinstance(error, commands.MissingPermissions):
+                await ctx.send(f"You need the `ban_members` permissions required to run this command {ctx.author.mention}!")
+            if isinstance(error, commands.MissingRequiredArgument):
+                await ctx.send("Please provide all of the vaild parameters. They are `member` `time` and `reason`")
+            if isinstance(error, commands.MemberNotFound):
+                await ctx.send("They're a :ghost: How do I interact with them?")
+            if isinstance(error, commands.BotMissingPermissions):
+                await ctx.send('I need the `ban_members` permission!')
