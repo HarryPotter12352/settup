@@ -24,3 +24,21 @@ def keep_alive():
 
     server = Thread(target=run)
     server.start()
+    
+  
+
+def meme():
+    """
+    This function let's you easily access memes
+    """
+    a = requests.get("https://meme-api.herokuapp.com/gimme/memes")
+    b = a.json()
+    title = b["title"]
+    upvote = b["ups"]
+    img = b["url"]
+    author = b["author"]
+
+    embed = discord.Embed(title=title,description=f"By **{author}**", color=0xFF5733)
+    embed.set_image(url=img)
+    embed.set_footer(text = f"{upvote} upvotes")
+    return embed
