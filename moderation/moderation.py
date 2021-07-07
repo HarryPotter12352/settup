@@ -194,3 +194,19 @@ class Moderation(commands.Cog):
                 await ctx.send("They're a :ghost: How do I interact with them?")
             if isinstance(error, commands.BotMissingPermissions):
                 await ctx.send('I need the `ban_members` permission!')
+                
+                
+        @commands.command()
+        @commands.has_permissions(manage_messages=True)
+        @commands.bot_has_permissions(manage_messages=True)
+        async def purge(self, ctx, limit : int = 2):
+            await ctx.channel.purge(limit=limit)
+            await ctx.send(f'Successfully purged {limit} messages!')
+
+
+        @purge.error 
+        async def purge_error(self, ctx, error):
+            if isinstance(error, commands.MissingPermissions):
+                await ctx.send(f'You need the `manage_messages` permission, {ctx.author.mention}!')
+            if isinstance(error, commands.BotMissingPermissions):
+                await ctx.send(f'I need `manage_messages` permissions!')                
