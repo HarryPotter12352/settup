@@ -6,13 +6,16 @@ from dipytools import tools
 
 
 class Moderation(commands.Cog):
+    """
+    This class is filled moderation commands
+    """
     def __init__(self, client):
         self.client = client
 
         @commands.command()
         @commands.has_permissions(ban_members=True)
         @commands.bot_has_permissions(ban_members=True)
-        async def ban(ctx, member: discord.Member, *, reason: str):
+        async def ban(self, ctx, member: discord.Member, *, reason: str):
             """
             Bans a member from a server
             Very used command
@@ -26,7 +29,7 @@ class Moderation(commands.Cog):
 
 
         @ban.error 
-        async def ban_error(ctx, error):
+        async def ban_error(self, ctx, error):
             if isinstance(error, commands.MissingPermissions):
                 await ctx.send(f"You need the `ban_members` permissions required to run this command {ctx.author.mention}!")
             if isinstance(error, commands.MissingRequiredArgument):
@@ -39,7 +42,7 @@ class Moderation(commands.Cog):
         @commands.command()
         @commands.has_permissions(kick_members=True)
         @commands.bot_has_permissions(kick_members=True)
-        async def kick(ctx, member : discord.Member, *, reason : str):
+        async def kick(self, ctx, member : discord.Member, *, reason : str):
             """
             Kicks a member
             """
@@ -50,7 +53,7 @@ class Moderation(commands.Cog):
             await ctx.send(f"Successfully kicked {member}!")
 
         @kick.error 
-        async def ban_error(ctx, error):
+        async def ban_error(self, ctx, error):
             if isinstance(error, commands.MissingPermissions):
                 await ctx.send(f"You need the `kick_members` permissions required to run this command {ctx.author.mention}!")
             if isinstance(error, commands.MissingRequiredArgument):
@@ -64,7 +67,7 @@ class Moderation(commands.Cog):
         @commands.command()
         @commands.has_permissions(manage_messages=True)
         @commands.bot_has_permissions(manage_roles=True)
-        async def mute(ctx, member : discord.Member, *, reason : str):
+        async def mute(self, ctx, member : discord.Member, *, reason : str):
             """
             Mutes a member from sending any messages
             """
@@ -82,7 +85,7 @@ class Moderation(commands.Cog):
 
 
         @mute.error 
-        async def mute_error(ctx, error):
+        async def mute_error(self, ctx, error):
             if isinstance(error, commands.MissingPermissions):
                 await ctx.send(f"You need the `manage_messages` permissions required to run this command {ctx.author.mention}!")
             if isinstance(error, commands.MissingRequiredArgument):
@@ -113,7 +116,7 @@ class Moderation(commands.Cog):
         @commands.command()
         @commands.has_permissions(manage_messages=True)
         @commands.bot_has_permissions(manage_roles=True)
-        async def tempmute(ctx, member : discord.Member, time, *, reason : str):
+        async def tempmute(self, ctx, member : discord.Member, time, *, reason : str):
             converted_time = convert(time)
             mutedRole = discord.utils.get(ctx.guild.roles, name = "Muted")
             if not mutedRole:
@@ -133,7 +136,7 @@ class Moderation(commands.Cog):
 
 
         @tempmute.error 
-        async def tempmute_error(ctx, error):
+        async def tempmute_error(self, ctx, error):
             if isinstance(error, commands.MissingPermissions):
                 await ctx.send(f"You need the `manage_messages` permissions required to run this command {ctx.author.mention}!")
             if isinstance(error, commands.MissingRequiredArgument):
