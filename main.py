@@ -5,7 +5,6 @@ from discord.ext import commands
 def init(prefix):
     prefix = str(prefix)
     client = commands.Bot(command_prefix=prefix, help_command=NewHelpName)
-    client.remove_command("help")
     return client
 
 
