@@ -4,7 +4,8 @@ from discord.ext import commands
 
 def init(prefix):
     prefix = str(prefix)
-    client = commands.Bot(command_prefix=prefix)
+    client = commands.Bot(command_prefix=prefix, help_command=NewHelpName)
+    client.remove_command("help")
     return client
 
 
@@ -15,5 +16,3 @@ class NewHelpName(commands.MinimalHelpCommand):
             emby = discord.Embed(description=page, colour = discord.Colour.red(), title = ":bookmark_tabs: | Help Menu")
             emby.set_thumbnail(url = " ")
             await destination.send(embed=emby)
-
-client.help_command = NewHelpName()
