@@ -52,7 +52,7 @@ class RPS(commands.Cog):
             elif check_win(str(reaction.emoji), bot_emoji):
 
                 await ctx.send(
-                    "**You win :sparkles**"
+                    "**You win ✨ **"
                 )
 
             else:
